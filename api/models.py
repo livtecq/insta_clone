@@ -10,7 +10,6 @@ def upload_post_path(instance, filename):
     ext = filename.split('.')[-1]
     return '/'.join(['posts', str(instance.userPost.id)+str(instance.title)+str(".")+str(ext)])
 
-
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
         if not email:
@@ -19,7 +18,6 @@ class UserManager(BaseUserManager):
         user = self.model(email=self.normalize_email(email))
         user.set_password(password)
         user.save(using=self._db)
-
         return user
 
     def create_superuser(self, email, password):
@@ -39,11 +37,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
     def __str__(self):
         return self.email
 
 class Profile(models.Model):
-    nickName =models.CharField(max_length=20)
+    nickName = models.CharField(max_length=20)
     userProfile = models.OneToOneField(
         settings.AUTH_USER_MODEL, related_name='userProfile',
         on_delete=models.CASCADE
@@ -54,7 +53,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.nickName
 
-class Post(models.model):
+class Post(models.Model):
     title = models.CharField(max_length=100)
     userPost = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='userPost',
